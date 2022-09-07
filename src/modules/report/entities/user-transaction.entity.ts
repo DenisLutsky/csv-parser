@@ -1,7 +1,6 @@
-import { Entity, Enum, IdentifiedReference, ManyToOne, OptionalProps, PrimaryKey, Property } from '@mikro-orm/core';
+import { Entity, IdentifiedReference, ManyToOne, OptionalProps, PrimaryKey, Property } from '@mikro-orm/core';
 
 import { UserEntity } from 'src/modules/user/entities';
-import { TransactionSources } from 'src/shared/enums';
 import { Nullable } from 'src/shared/types';
 
 @Entity({ tableName: 'transactions' })
@@ -9,8 +8,8 @@ export class UserTransactionEntity {
   @PrimaryKey()
   public transactionId!: number;
 
-  @Enum({ items: () => TransactionSources, default: TransactionSources.CUSTOM_SOURCE })
-  public source!: TransactionSources;
+  @Property({ type: String })
+  public source!: string;
 
   @Property({ columnType: 'decimal(10,2)', unsigned: true })
   public sum!: number;

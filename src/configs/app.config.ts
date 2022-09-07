@@ -6,6 +6,7 @@ export const config = {
     port: process.env.PORT || 3000,
     environment: process.env.ENVIRONMENT || 'local',
     secret: process.env.JWT_SECRET || 'secret',
+    timeZone: process.env.TIME_ZONE || 'UTC',
   },
   mysql: {
     host: process.env.MYSQL_HOST || 'localhost',

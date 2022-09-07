@@ -92,18 +92,12 @@
         },
         "source": {
           "name": "source",
-          "type": "enum('income', 'other', 'custom-source')",
+          "type": "varchar(255)",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "default": "'custom-source'",
-          "enumItems": [
-            "income",
-            "other",
-            "custom-source"
-          ],
-          "mappedType": "enum"
+          "mappedType": "string"
         },
         "sum": {
           "name": "sum",

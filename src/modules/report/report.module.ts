@@ -5,9 +5,10 @@ import { ReportController } from './controllers';
 import { ReportService } from './services';
 import { UserTransactionEntity } from './entities';
 import { AuthModule } from '../auth/auth.module';
+import { UserModule } from '../user/user.module';
 
 @Module({
-  imports: [MikroOrmModule.forFeature([UserTransactionEntity]), AuthModule],
+  imports: [MikroOrmModule.forFeature([UserTransactionEntity]), AuthModule, UserModule],
   controllers: [ReportController],
   providers: [ReportService],
 })

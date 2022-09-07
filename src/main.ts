@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { config } from './configs/app.config';
+import './configs/timezone.config';
 
 import { AppModule } from './app.module';
 
