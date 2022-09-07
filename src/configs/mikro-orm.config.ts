@@ -1,7 +1,7 @@
 import { Options, EntityCaseNamingStrategy } from '@mikro-orm/core';
 import { config } from './app.config';
 
-const { user, password, port, name, host, debug } = config.mysql;
+const { user, password, port, dbName, host, debug } = config.mysql;
 
 const ormConfig: Options = {
   migrations: {
@@ -12,7 +12,7 @@ const ormConfig: Options = {
     emit: 'ts',
   },
   entities: ['dist/**/*.entity.js'],
-  dbName: name,
+  dbName,
   password,
   user,
   host,

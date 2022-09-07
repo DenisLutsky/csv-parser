@@ -1,26 +1,37 @@
-import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from '../dto/create-user.dto';
-import { UpdateUserDto } from '../dto/update-user.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { EntityRepository } from '@mikro-orm/core';
+import { InjectRepository } from '@mikro-orm/nestjs';
+
+import { UserInput } from 'src/shared/interfaces';
+import { UserEntity } from '../entities';
+import { Nullable } from 'src/shared/types';
 
 @Injectable()
 export class UserService {
-  public create(createUserDto: CreateUserDto): string {
-    return 'This action adds a new user';
+  public constructor(
+    @InjectRepository(UserEntity)
+    private readonly userRepository: EntityRepository<UserEntity>,
+  ) {}
+
+  public async createUser(userInput: UserInput): Promise<UserEntity> {
+    const user = this.userRepository.create(userInput);
+
+    await this.userRepository.persistAndFlush(user);
+
+    return user;
   }
 
-  public findAll(): string {
-    return `This action returns all user`;
+  public async findOneById(userId: number): Promise<UserEntity> {
+    const user = await this.userRepository.findOne({ userId });
+
+    if (!user) throw new NotFoundException(`User with id:${userId} was not found`);
+
+    return user;
   }
 
-  public findOne(id: number): string {
-    return `This action returns a #${id} user`;
-  }
+  public async findOneByEmail(email: string): Promise<Nullable<UserEntity>> {
+    const user = await this.userRepository.findOne({ email });
 
-  public update(id: number, updateUserDto: UpdateUserDto): string {
-    return `This action updates a #${id} user`;
-  }
-
-  public remove(id: number): string {
-    return `This action removes a #${id} user`;
+    return user;
   }
 }
