@@ -5,6 +5,7 @@ export const config = {
     name: process.env.APP_NAME || 'csv-parser',
     port: process.env.PORT || 3000,
     environment: process.env.ENVIRONMENT || 'local',
+    secret: process.env.JWT_SECRET || 'secret',
   },
   mysql: {
     host: process.env.MYSQL_HOST || 'localhost',

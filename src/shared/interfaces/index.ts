@@ -1,1 +1,1 @@
-export * from './user-input.interface';
+export * from './auth-input.interface';

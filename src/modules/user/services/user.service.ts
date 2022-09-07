@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 
-import { UserInput } from 'src/shared/interfaces';
+import { AuthInput } from 'src/shared/interfaces';
 import { UserEntity } from '../entities';
 import { Nullable } from 'src/shared/types';
 
@@ -13,7 +13,7 @@ export class UserService {
     private readonly userRepository: EntityRepository<UserEntity>,
   ) {}
 
-  public async createUser(userInput: UserInput): Promise<UserEntity> {
+  public async createUser(userInput: AuthInput): Promise<UserEntity> {
     const user = this.userRepository.create(userInput);
 
     await this.userRepository.persistAndFlush(user);
