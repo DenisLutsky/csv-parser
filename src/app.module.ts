@@ -8,7 +8,5 @@ import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [MikroOrmModule.forRoot(ormConfig), UserModule, ReportModule, AuthModule],
-  controllers: [],
-  providers: [],
 })
 export class AppModule {}
