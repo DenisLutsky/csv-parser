@@ -4,9 +4,10 @@ import { InjectRepository } from '@mikro-orm/nestjs';
 import moment from 'moment';
 
 import { UserTransactionEntity } from '../entities';
-import { Transaction } from '../interfaces';
+import { ReportFilter, Transaction } from '../interfaces';
 import { TimeFormats } from 'src/shared/enums';
 import { UserService } from 'src/modules/user/services';
+import { Report } from '../types';
 
 @Injectable()
 export class ReportService {
@@ -16,7 +17,7 @@ export class ReportService {
     private readonly userService: UserService,
   ) {}
 
-  public async uploadData(file: Express.Multer.File, userId: number): Promise<any> {
+  public async uploadData(file: Express.Multer.File, userId: number): Promise<UserTransactionEntity[]> {
     const csvStringified = file.buffer.toString();
 
     const lines = csvStringified.split('\r\n');
@@ -48,8 +49,31 @@ export class ReportService {
     return userTransactions;
   }
 
-  public getReport(): string {
-    return `This action returns all report`;
+  public async getReport(filter: ReportFilter, userId: number): Promise<Report> {
+    const { date, source } = filter;
+
+    const month = moment(date, TimeFormats.MONTH_FORMAT);
+
+    const records = await this.transactionsRepository.find({
+      date: {
+        $gte: month.toDate(),
+        $lt: month.add(1, 'month').toDate(),
+      },
+      source: { $in: source },
+      user: {
+        userId,
+      },
+    });
+
+    const response = source.map((s) => {
+      const sums = records.filter((r) => r.source === s).map((r) => Number(r.sum));
+
+      const total = sums.reduce((total, x) => total + x, 0);
+
+      return { source: s, data: [{ date: month.format(TimeFormats.MONTH_FORMAT), total }] };
+    });
+
+    return response;
   }
 
   private prepareRecords(records: string[]): Transaction[] {
