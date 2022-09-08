@@ -1,16 +1,19 @@
-import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { ApiHeader } from '@nestjs/swagger';
+import { JwtPayload } from 'jsonwebtoken';
 
 import { AuthGuard } from 'src/shared/guards';
-import { UserEntity } from '../entities';
-import { UserService } from '../services';
+import { RequestContext } from 'src/shared/interfaces';
 
 @Controller('user')
 @UseGuards(AuthGuard)
+@ApiHeader({
+  name: 'auth',
+  description: 'Authentication JWToken',
+})
 export class UserController {
-  public constructor(private readonly userService: UserService) {}
-
-  @Get(':id')
-  public async findOne(@Param('id') userId: string): Promise<UserEntity> {
-    return await this.userService.findOneById(+userId);
+  @Get('/me')
+  public async getMe(@Req() { user }: RequestContext): Promise<JwtPayload> {
+    return user;
   }
 }
